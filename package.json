@@ -1,0 +1,36 @@
+{
+  "name": "librarian",
+  "module": "src/index.js",
+  "type": "module",
+  "version": "1.0.50",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "css": "bunx tailwindcss -i src/style.css -o static/assets/style.css --watch",
+    "build:css": "bunx tailwindcss -i src/style.css -o static/assets/style.css --minify",
+    "migrate": "bunx prisma migrate dev"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "autoprefixer": "^10.4.20",
+    "prisma": "^6.3.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@lucia-auth/adapter-prisma": "^4.0.1",
+    "@prisma/client": "^6.3.0",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "lucia": "^3.2.2",
+    "morgan": "^1.10.0",
+    "oslo": "^1.2.1",
+    "uuid": "^11.0.5",
+    "winston": "^3.17.0"
+  }
+}

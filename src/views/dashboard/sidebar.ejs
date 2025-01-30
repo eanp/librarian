@@ -1,0 +1,124 @@
+<button
+id="menuButton"
+type="button"
+class="lg:hidden fixed top-2 left-2 z-20 p-2 rounded-md bg-gray-800 text-white"
+>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  viewBox="0 0 24 24"
+  stroke="currentColor"
+  class="w-6 h-6"
+>
+  <path
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    d="M4 6h16M4 12h16m-7 6h7"
+  ></path>
+</svg>
+</button>
+
+{/* <!-- Sidebar --> */}
+<div
+id="sidebar"
+class="sidebar fixed inset-y-0 top-0 left-0 w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto lg:relative lg:translate-x-0 h-full"
+>
+<nav class="mt-8 lg:mt-0">
+  <div class="mb-4">
+    <ul class="mt-2 space-y-2">
+      <li>
+        <a
+          href="#"
+          class="block pl-4 text-sm text-gray-600 hover:text-blue-600"
+        >
+          Introduction
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  {/* <!-- menu --> */}
+  <a href="/book">
+    <button
+      type="button"
+      class="w-full relative flex cursor-default select-none hover:bg-neutral-100 items-center rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+    >
+      <svg
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        class="w-4 h-4 mr-2"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+
+      <span>Book</span>
+    </button>
+  </a>
+  <button
+    type="button"
+    hx-get="/role"
+    hx-select="#main"
+    hx-target="#main"
+    hx-indicator=".htmx-indicator"
+    hx-swap="outerHTML"
+    hx-push-url={true}
+    class="w-full relative flex cursor-default select-none hover:bg-neutral-100 items-center rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="w-4 h-4 mr-2"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="4"></circle>
+      <line x1="4.93" x2="9.17" y1="4.93" y2="9.17"></line>
+      <line x1="14.83" x2="19.07" y1="14.83" y2="19.07"></line>
+      <line x1="14.83" x2="19.07" y1="9.17" y2="4.93"></line>
+      <line x1="14.83" x2="18.36" y1="9.17" y2="5.64"></line>
+      <line x1="4.93" x2="9.17" y1="19.07" y2="14.83"></line>
+    </svg>
+
+    <span>Role</span>
+  </button>
+  <a
+    href="/logout"
+    type="button"
+    class="relative flex cursor-default select-none hover:bg-neutral-100 items-center rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="w-4 h-4 mr-2"
+    >
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+      <polyline points="16 17 21 12 16 7"></polyline>
+      <line x1="21" x2="9" y1="12" y2="12"></line>
+    </svg>
+    <span>Log out</span>
+  </a>
+</nav>
+</div>
