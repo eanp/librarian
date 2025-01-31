@@ -24,6 +24,8 @@ jobs:
             git pull origin main
             git status
             bun install
+            bun generate
+            bun migrate
             cp .env.example .env
             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
             echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env

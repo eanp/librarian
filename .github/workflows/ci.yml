@@ -23,13 +23,4 @@ jobs:
           check-latest: true
 
       - name: Install dependencies 👨🏻‍💻
-        run: pnpm install
-
-      - name: Make build css 👨🏻‍💻
-        run: pnpm build:css
-
-      - name: Make generate database 👨🏻‍💻
-        run: pnpm generate
-
-      - name: Make Migrate Database 👨🏻‍💻
-        run: pnpm migrate
+        run: npm install
