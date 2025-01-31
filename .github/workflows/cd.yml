@@ -32,15 +32,18 @@ jobs:
             git pull origin main
             git status
 
-            echo "DATABASE_URL="${{ secrets.DATABASE_URL }}"" >> .env
-            echo "APP_NAME="${{ secrets.APP_NAME }}"" >> .env
-            echo "SECRET_SESSION_KEY="${{ secrets.SECRET_SESSION_KEY }}""" >> .env
-            echo "PORT=${{ secrets.PORT }}" >> .env
+            export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+            export APP_NAME="${{ secrets.APP_NAME }}"
+            export SECRET_SESSION_KEY="${{ secrets.SECRET_SESSION_KEY }}"
+            export PORT="${{ secrets.PORT }}"
+
+            # Debugging env
+            printenv | grep DATABASE_URL || echo "DATABASE_URL not found"
+            printenv | grep APP_NAME || echo "APP_NAME not found"
 
             bun install
             bun generate
             bun migrate
-
 
             pm2 reload librarian
             pm2 restart librarian
