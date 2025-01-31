@@ -18,9 +18,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            export PATH="$HOME/.bun/bin:$HOME/.nvm/versions/node/$(node -v)/bin:$PATH"
-            export PATH="$HOME/.local/share/pnpm/pm2:$HOME/.local/share/pnpm/pm2"
+            # Load environment
             source ~/.bashrc
+            source ~/.profile
+            export PATH="$HOME/.nvm/versions/node/(node -v)/bin:$HOME/.local/share/pnpm:$PATH"
+
+            # Debugging check
+            which git || echo "git not found"
+            which bun || echo "bun not found"
+            which pm2 || echo "pm2 not found"
+
             cd ~/app/librarian
             git pull origin main
             git status
