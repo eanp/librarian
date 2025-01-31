@@ -2,10 +2,14 @@ import bodyParser from "body-parser";
 import * as dotenv from "dotenv";
 import express from "express";
 import expressLayouts from "express-ejs-layouts";
-import path from "path";
 import morgan from "morgan";
-
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import route from "./routes/routes.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 dotenv.config();
 
 const app = express();
@@ -13,7 +17,7 @@ const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.set("views", path.join(process.cwd(), "src", "views"));
+app.set("views", path.join(__dirname,"views"));
 app.set("layout", "layouts");
 app.use(expressLayouts);
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
@@ -29,6 +33,7 @@ app.use("/", route);
 app.use((req, res, next) => {
   res.status(404).send("Sorry, page not found | 404");
 });
+
 
 app.listen(PORT, () =>
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`)
