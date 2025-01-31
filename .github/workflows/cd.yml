@@ -18,6 +18,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            export PATH="$HOME/.bun/bin:$HOME/.nvm/versions/node/$(node -v)/bin:$PATH"
+            export PATH="$HOME/.local/share/pnpm/pm2:$HOME/.local/share/pnpm/pm2"
+            source ~/.bashrc
             cd ~/app/librarian
             git pull origin main
             git status
