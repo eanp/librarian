@@ -35,11 +35,10 @@ jobs:
             export DATABASE_URL="${{ secrets.DATABASE_URL }}"
             export APP_NAME="${{ secrets.APP_NAME }}"
             export SECRET_SESSION_KEY="${{ secrets.SECRET_SESSION_KEY }}"
-            export PORT="${{ secrets.PORT }}"
+            export PORT=${{ secrets.PORT }}
 
             # Debugging env
             printenv | grep DATABASE_URL || echo "DATABASE_URL not found"
-            printenv | grep APP_NAME || echo "APP_NAME not found"
 
             bun install
             bun generate
