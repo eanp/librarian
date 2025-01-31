@@ -32,14 +32,15 @@ jobs:
             git pull origin main
             git status
 
-            bun install
-            bun generate
-            bun migratedeploy
-
             echo "DATABASE_URL="${{ secrets.DATABASE_URL }}"" >> .env
             echo "APP_NAME="${{ secrets.APP_NAME }}"" >> .env
             echo "SECRET_SESSION_KEY="${{ secrets.SECRET_SESSION_KEY }}""" >> .env
             echo "PORT=${{ secrets.PORT }}" >> .env
+
+            bun install
+            bun generate
+            bun migrate
+
 
             pm2 reload librarian
             pm2 restart librarian
