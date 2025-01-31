@@ -9,6 +9,7 @@ import route from "./routes/routes.js";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -29,6 +30,6 @@ app.use((req, res, next) => {
   res.status(404).send("Sorry, page not found | 404");
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`⚡️[server]: Server is running at http://localhost:${process.env.PORT}`)
+app.listen(PORT, () =>
+  console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`)
 );
