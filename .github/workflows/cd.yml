@@ -12,24 +12,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy Using ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Using Native SSH
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/app/librarian
             git pull origin main
             git status
+
             bun install
             bun generate
             bun migrate
+
             cp .env.example .env
             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
             echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
             echo "SECRET_SESSION_KEY=${{ secrets.SECRET_SESSION_KEY }}" >> .env
             echo "PORT=${{ secrets.PORT }}" >> .env
+
             pm2 reload librarian
             pm2 restart librarian
+          EOF
