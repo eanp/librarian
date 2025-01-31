@@ -23,13 +23,13 @@ jobs:
           check-latest: true
 
       - name: Install dependencies 👨🏻‍💻
-        run: bun install
+        run: pnpm install
 
       - name: Make build css 👨🏻‍💻
-        run: bun build:css
+        run: pnpm build:css
 
       - name: Make generate database 👨🏻‍💻
-        run: bun generate
+        run: pnpm generate
 
       - name: Make Migrate Database 👨🏻‍💻
-        run: bun migrate
+        run: pnpm migrate
