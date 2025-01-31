@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy Using Native SSH
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_NAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/app/librarian
             git pull origin main
             git status
