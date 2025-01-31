@@ -16,8 +16,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script:
+          port: 22
+          script: |
             cd ~/app/librarian
             git pull origin main
             git status
