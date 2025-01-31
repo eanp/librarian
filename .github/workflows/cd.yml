@@ -37,9 +37,9 @@ jobs:
             bun migrate
 
             cp .env.example .env
-            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-            echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
-            echo "SECRET_SESSION_KEY=${{ secrets.SECRET_SESSION_KEY }}" >> .env
+            echo "DATABASE_URL="${{ secrets.DATABASE_URL }}"" >> .env
+            echo "APP_NAME="${{ secrets.APP_NAME }}"" >> .env
+            echo "SECRET_SESSION_KEY="${{ secrets.SECRET_SESSION_KEY }}""" >> .env
             echo "PORT=${{ secrets.PORT }}" >> .env
 
             pm2 reload librarian
