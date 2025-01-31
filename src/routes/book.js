@@ -2,7 +2,8 @@ import { v4 as uuid } from "uuid";
 import { logger } from "../application/logging.js";
 import { prismaClient } from "../application/database.js";
 import express from "express";
-
+import { Protect } from "../application/auth.js";
+import {upload} from "../middleware/photo.js"
 const route = express.Router();
 const sortOptions = [
   { value: "title-asc", label: "Title (A-Z)" },
@@ -139,6 +140,8 @@ const bookController = {
       const publicationYear = isNaN(parseInt(body.publicationYear))
         ? new Date().getFullYear()
         : body.publicationYear;
+
+      console.log(req.file)
 
       const payload = {
         code: uuid(),
@@ -299,10 +302,10 @@ const bookController = {
 };
 
 
-route.post('/book', bookController.createBook);
-route.get('/book', bookController.getBooks);
-route.get('/book/:code', bookController.getBookDetails);
-route.put('/book/:code', bookController.updateBook);
-route.delete('/book/:code', bookController.deleteBook);
+route.post('/book/create', Protect,  upload.single('photo'),bookController.createBook);
+route.get('/book', Protect, bookController.getBooks);
+route.get('/book/:code', Protect, bookController.getBookDetails);
+route.put('/book/:code', Protect, bookController.updateBook);
+route.delete('/book/:code', Protect, bookController.deleteBook);
 
 export default route;

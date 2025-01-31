@@ -43,6 +43,8 @@ route.use(async (req, res, next) => {
   res.locals.user = user;
   res.locals.query = req.query;
   res.locals.url = req.originalUrl;
+  console.log(req.originalUrl)
+  console.log(user)
   return next();
 });
 
@@ -62,6 +64,12 @@ route.get("/register", async (req, res, next) => {
 
 route.get("/", Protect, async (req, res, next) => {
   res.setHeader("Content-Type", "text/html").status(200).render("dashboard-main", { ...initial_data});
+});
+
+// dashboard book
+route.get("/book/create", Protect, async (req, res, next) => {
+  const book = req.body
+  res.setHeader("Content-Type", "text/html").status(200).render("book/create", { ...initial_data, book});
 });
 
 
