@@ -21,7 +21,7 @@ jobs:
             # Load environment
             source ~/.bashrc
             source ~/.profile
-            export PATH="$HOME/.nvm/versions/node/(node -v)/bin:$HOME/.local/share/pnpm:$PATH"
+            export PATH="$HOME/.nvm/versions/node/v22.13.1/bin:$HOME/.local/share/pnpm:$PATH"
 
             # Debugging check
             which git || echo "git not found"
