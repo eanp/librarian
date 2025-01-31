@@ -34,7 +34,7 @@ jobs:
 
             bun install
             bun generate
-            bun migrate
+            bun migratedeploy
 
             cp .env.example .env
             echo "DATABASE_URL="${{ secrets.DATABASE_URL }}"" >> .env
