@@ -8,7 +8,9 @@
     "dev": "nodemon src/index.js",
     "css": "bunx tailwindcss -i src/style.css -o static/assets/style.css --watch",
     "build:css": "bunx tailwindcss -i src/style.css -o static/assets/style.css --minify",
-    "migrate": "bunx prisma migrate dev"
+    "generate": "bunx prisma generate",
+    "migrate": "bunx prisma migrate dev",
+    "migratedeploy": "bunx prisma migrate deploy"
   },
   "devDependencies": {
     "@types/bun": "latest",
