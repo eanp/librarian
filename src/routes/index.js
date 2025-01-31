@@ -5,6 +5,7 @@ import seederRouter from "./seeder.js";
 import authCommand from "./auth.command.js";
 import authQuery from "./auth.query.js";
 import book from "./book.js";
+import dashboardBook from "./dashboard.book.js";
 import { lucia, Protect } from "../application/auth.js";
 dotenv.config();
 
@@ -61,21 +62,14 @@ route.get("/login", async (req, res, next) => {
 route.get("/register", async (req, res, next) => {
   res.setHeader("Content-Type", "text/html").status(200).render("register", { ...initial_data});
 });
-
-route.get("/", Protect, async (req, res, next) => {
-  res.setHeader("Content-Type", "text/html").status(200).render("dashboard-main", { ...initial_data});
+route.get("/", Protect ,async (req, res, next) => {
+  res.redirect("/book")
 });
-
-// dashboard book
-route.get("/book/create", Protect, async (req, res, next) => {
-  const book = req.body
-  res.setHeader("Content-Type", "text/html").status(200).render("book/create", { ...initial_data, book});
-});
-
 
 route.use(seederRouter)
 route.use(authCommand)
 route.use(authQuery)
 route.use(book)
+route.use(dashboardBook)
 
 export default route;

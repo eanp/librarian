@@ -16,13 +16,6 @@ const sortOptions = [
   { value: "created_at-desc", label: "Date Added (Newest)" },
 ];
 
-
-const condition = [
-  { value: "new" },
-  { value: "used" },
-  { value: "damaged" },
-];
-
 const filterOptions = [
   {
     label: "Category",
@@ -48,9 +41,11 @@ const filterOptions = [
     label: "Condition",
     name: "condition",
     options: [
-      { value: "new" },
-      { value: "used" },
-      { value: "damaged" }
+      { value: "Excelent" },
+      { value: "New" },
+      { value: "Good" },
+      { value: "Fair" },
+      { value: "Poor" },
     ],
     icon: '<svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke="currentColor" fill="none" stroke-width="2"/></svg>'
   }
@@ -59,7 +54,7 @@ const filterOptions = [
 
 // Helper functions
 const parseFilters = (query) => {
-  const filterFields = ['category', 'publisher', 'publicationYear', 'priceRange', 'writer'];
+  const filterFields = ['category', 'publisher', 'publicationYear', 'priceRange', 'writer', "condition"];
   const filters = [];
 
   filterFields.forEach(field => {
@@ -94,6 +89,7 @@ const buildWhereClause = (filters, searchQuery) => {
         { writer: { contains: searchQuery } },
         { publisher: { contains: searchQuery } },
         { category: { contains: searchQuery } },
+        { condition: { contains: searchQuery } },
       ],
     });
   }
@@ -131,65 +127,44 @@ const validateSort = (sortField, sortOrder) => {
   return { [field]: order };
 };
 
-// Controller methods
 const bookController = {
-  // Create new book
-  createBook: async (req, res) => {
-    try {
-      const { body } = req;
-      const publicationYear = isNaN(parseInt(body.publicationYear))
-        ? new Date().getFullYear()
-        : body.publicationYear;
 
-      console.log(req.file)
-
-      const payload = {
-        code: uuid(),
-        title: body.title ?? "-",
-        description: body.description ?? "-",
-        publicationYear,
-        condition: body.condition ?? "",
-        cover_photo: body.cover_photo ?? "",
-        price: body.price ?? 0,
-        grade: body.grade ?? "",
-        writer: body.writer ?? "",
-        class: body.class ?? "",
-        category: body.category ?? "",
-        publisher: body.publisher ?? "",
-        rack: body.rack ?? "",
-        created_by: "4d942489-fffb-4272-ae1a-af670ff50e76",
-      };
-
-      const uniqueBookCode = await prismaClient.book.count({
-        where: { code: payload.code }
-      });
-
-      if (uniqueBookCode !== 0) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Code Book Already exists'
-        });
-      }
-
-      const book = await prismaClient.book.create({ data: payload });
-      logger.info('Book created:', book);
-
-      return res.redirect('/book');
-    } catch (err) {
-      logger.error('Error creating book:', err);
-      return res.status(500).render('error', {
-        message: err.message || 'An error occurred while creating the book'
-      });
-    }
-  },
-
-  // Get all books with filtering and sorting
   getBooks: async (req, res) => {
     try {
       const searchQuery = req.query.search?.toLowerCase() || '';
       const currentSort = req.query.sort || 'created_at-desc';
       const [sortField, sortOrder] = currentSort.split('-');
       const filters = parseFilters(req.query);
+
+      const distinctCategories = await prismaClient.book.findMany({
+        distinct: ['category'],
+        select: {
+          category: true
+        }
+      });
+      filterOptions[0].options = distinctCategories.map(e => ({
+        value: e.category
+      }));
+
+      const distinctPublisher = await prismaClient.book.findMany({
+        distinct: ['publisher'],
+        select: {
+          publisher: true
+        }
+      });
+      filterOptions[1].options = distinctPublisher.map(e => ({
+        value: e.publisher
+      }));
+
+      const distinctCandition = await prismaClient.book.findMany({
+        distinct: ['condition'],
+        select: {
+          condition: true
+        }
+      });
+      filterOptions[2].options = distinctCandition.map(e => ({
+        value: e.condition
+      }));
 
       const books = await prismaClient.book.findMany({
         where: buildWhereClause(filters, searchQuery),
@@ -202,14 +177,15 @@ const bookController = {
         sort: currentSort
       });
 
-      return res.render('dashboard-book', {
+      console.log(distinctCandition)
+
+      return res.render('book/main', {
         books,
         searchValue: searchQuery,
         currentSort,
         activeFilters: filters,
         sortOptions,
-        filterOptions,
-        condition
+        filterOptions
       });
     } catch (err) {
       logger.error('Error retrieving books:', err);
@@ -218,70 +194,6 @@ const bookController = {
       });
     }
   },
-
-  // Get book details
-  getBookDetails: async (req, res) => {
-    try {
-      const { code } = req.params;
-      const book = await prismaClient.book.findUnique({
-        where: { code }
-      });
-
-      if (!book) {
-        return res.status(404).render('error', {
-          message: 'Book not found'
-        });
-      }
-
-      return res.render('dashboard/book-detail', { book });
-    } catch (err) {
-      logger.error('Error retrieving book details:', err);
-      return res.status(500).render('error', {
-        message: err.message || 'An error occurred while retrieving book details'
-      });
-    }
-  },
-
-  // Update book
-  updateBook: async (req, res) => {
-    try {
-      const { code } = req.params;
-      const { body } = req;
-      const publicationYear = isNaN(parseInt(body.publicationYear))
-        ? new Date().getFullYear()
-        : body.publicationYear;
-
-      const payload = {
-        title: body.title ?? "-",
-        description: body.description ?? "-",
-        publicationYear,
-        condition: body.condition ?? "",
-        cover_photo: body.cover_photo ?? "",
-        price: body.price ?? 0,
-        grade: body.grade ?? "",
-        writer: body.writer ?? "",
-        class: body.class ?? "",
-        category: body.category ?? "",
-        publisher: body.publisher ?? "",
-        rack: body.rack ?? "",
-      };
-
-      const book = await prismaClient.book.update({
-        where: { code },
-        data: payload
-      });
-
-      logger.info('Book updated:', book);
-      return res.redirect('/book');
-    } catch (err) {
-      logger.error('Error updating book:', err);
-      return res.status(500).render('error', {
-        message: err.message || 'An error occurred while updating the book'
-      });
-    }
-  },
-
-  // Delete book
   deleteBook: async (req, res) => {
     try {
       const { code } = req.params;
@@ -302,10 +214,6 @@ const bookController = {
 };
 
 
-route.post('/book/create', Protect,  upload.single('photo'),bookController.createBook);
 route.get('/book', Protect, bookController.getBooks);
-route.get('/book/:code', Protect, bookController.getBookDetails);
-route.put('/book/:code', Protect, bookController.updateBook);
-route.delete('/book/:code', Protect, bookController.deleteBook);
 
 export default route;

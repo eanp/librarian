@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+</head>
+
+<body class="bg-gray-100">
+  <div class="container mx-auto px-4 py-8">
+    <form id="dashboard-book-detail" class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-md space-y-4">
+
+
+      <div class="flex pt-4 pb-6 justify-between">
+        <h3 class="text-lg font-semibold capitalize">
+          <%= book?.code ?? "Book Detail Code Error" %>
+        </h3>
+
+      </div>
+
+      <% if (book?.cover_photo) { %>
+        <img src="/<%= book?.cover_photo %>" alt="book" class="w-1/2" />
+        <button id="removeButton" type="button"
+          class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100">
+          <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <% } else { %>
+          <h2>no image</h2>
+          <% } %>
+
+            <div class="grid grid-cols-2 gap-4">
+              <input disabled type="text" name="title" placeholder="Book Title" value="<%= book?.title %>"
+                class="col-span-2 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required />
+              <input disabled type="text" name="writer" placeholder="Author" value="<%= book?.writer %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="number" name="publicationYear" placeholder="Publication Year"
+                value="<%= book?.publicationYear %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="text" name="publisher" placeholder="Publisher" value="<%= book?.publisher %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="text" name="category" placeholder="Book Category" value="<%= book?.category %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="text" name="class" placeholder="Class/Grade" value="<%= book?.class %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="text" name="rack" placeholder="Book Rack Location" value="<%= book?.rack %>"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input disabled type="number" name="price" placeholder="Book Price" value="<%= book?.price %>" step="0.01"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <select disabled name="condition"
+                class="col-span-2 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Select Book Condition</option>
+                <option value="NEW" <%=book?.condition==='NEW' ? 'selected' : '' %>>NEW</option>
+                <option value="GOOD" <%=book?.condition==='GOOD' ? 'selected' : '' %>>GOOD</option>
+                <option value="FAIR" <%=book?.condition==='FAIR' ? 'selected' : '' %>>FAIR</option>
+                <option value="POOR" <%=book?.condition==='POOR' ? 'selected' : '' %>>POOR</option>
+              </select>
+            </div>
+
+            <textarea disabled name="description" placeholder="Book Description"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"><%= book?.description %></textarea>
+
+
+            <% if (status==="error" ) { %>
+              <div id="errorMessages"
+                class="relative w-full rounded-lg border border-transparent bg-red-50 p-4 [&>svg]:absolute [&>svg]:text-foreground [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:translate-y-[-3px] [&:has(svg)]:pl-11 text-red-600 mt-5">
+                <svg class="w-5 h-5 -translate-y-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <h5 class="font-medium leading-none tracking-tight text-left">Oops</h5>
+                <div class="text-sm opacity-80 whitespace-pre-line text-left -ml-5 pt-3">
+                  <%= messages %>
+                </div>
+              </div>
+              <% } %>
+    </form>
+  </div>
+</body>
+
+</html>

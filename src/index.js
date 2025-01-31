@@ -6,7 +6,7 @@ import morgan from "morgan";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import route from "./routes/routes.js";
+import route from "./routes/index.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

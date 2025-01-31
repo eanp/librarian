@@ -47,14 +47,13 @@ route.post("/login", async (req, res, next) => {
     return
   }
 
-  console.log(user)
   delete user.password;
   const userId = user.id;
   const session = await lucia.createSession(userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   res.header("Set-Cookie", sessionCookie.serialize());
   res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-  res.header({ "Hx-redirect": "/" }).send("login successful!");
+  res.header({ "Hx-redirect": "/book" }).send("login successful!");
   return
 }
 );
