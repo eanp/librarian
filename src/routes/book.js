@@ -216,7 +216,7 @@ const bookController = {
         activeFilters: filters,
         sortOptions,
         filterOptions,
-        meta
+        meta,
       });
     } catch (err) {
       logger.error('Error retrieving books:', err);

@@ -20,12 +20,13 @@
 
           <div class="w-1/2 lg:w-1/5 md:w-1/3" x-data="{ createModalOpen: false }" @keydown.escape.window="createModalOpen = false" :class="{ 'z-40': createModalOpen }">
 
-            <button
-            type="button" @click="createModalOpen=true;window.history.pushState({},'create book','/book/create')" hx-push-url="/book/create"
-            hx-get="/book/create" hx-select="#dashboard-book-create" hx-target="#dashboard-book-create" hx-swap="outerHTML"
+            <a href="/book/create">
+
+              <button
               class="inline-flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 rounded-md bg-neutral-950 hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">
               Create Book
             </button>
+          </a>
 
             <!-- template -->
             <template x-teleport="body">
@@ -309,58 +310,6 @@
         </div>
       </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('previewContainer');
-        const previewImage = document.getElementById('previewImage');
-        const removeButton = document.getElementById('removeButton');
-
-        // File handling functions
-        function handleFile(file) {
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewImage.src = e.target.result;
-                    previewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Drag and drop events
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('border-blue-300');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('border-blue-300');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('border-blue-300');
-            const file = e.dataTransfer.files[0];
-            fileInput.files = e.dataTransfer.files;
-            handleFile(file);
-        });
-
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            handleFile(file);
-        });
-
-        // Remove button
-        removeButton.addEventListener('click', () => {
-            previewContainer.classList.add('hidden');
-            previewImage.src = '';
-            fileInput.value = '';
-        });
-    });
-</script>
 </body>
 
 </html>
