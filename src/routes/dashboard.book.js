@@ -85,7 +85,6 @@ dashboardBook.get("/book/detail/:code", Protect, async (req, res, next) => {
       where: { code }
     });
 
-    console.log(book)
     res.setHeader("Content-Type", "text/html").status(200).render("book/detail", { ...initial_data, book });
   }
   catch (err) {

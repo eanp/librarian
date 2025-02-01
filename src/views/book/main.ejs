@@ -73,7 +73,7 @@
               </svg>
               <input id="search-input"
                 class="w-full pl-9 pr-3 py-2 border border-neutral-300 rounded-md text-sm placeholder:text-neutral-500 focus:outline-none focus:ring focus:ring-neutral-400"
-                type="search" name="search" placeholder="Search books..." hx-get="<%= url %>"
+                type="search" name="search" placeholder="Search books..." hx-get="/book"
                 hx-trigger="keyup changed delay:500ms" hx-target="#content-book" hx-select="#content-book"
                 hx-indicator=".htmx-indicator" hx-push-url="true" hx-swap="outerHTML" value="<%= searchValue %>" />
             </div>
@@ -122,7 +122,7 @@
                       <option value="">Select <%= filter.label.toLowerCase() %>
                       </option>
                       <% filter.options.forEach(function(option) { %>
-                        <option value="<%= option.value %>">
+                        <option value="<%= option.value %>"  <%=currentFilter[filter.name]===option.value ? 'selected' : '' %>>
                           <%= option.value %>
                         </option>
                         <% }); %>
@@ -231,6 +231,76 @@
                   <% }); %>
               </tbody>
             </table>
+
+            <!-- bottom -->
+            <div class="flex items-center justify-between w-full h-16 px-3 border-t border-neutral-200 ">
+              <div class="flex flex-row">
+
+                <p class="pl-2 text-sm text-gray-700">Showing <span class="font-medium">
+                    <%= meta.startItems %>
+                  </span> to <span class="font-medium">
+                    <%= meta.endItems %>
+                  </span> of <span class="font-medium">
+                    <%= meta.totalItems %>
+                  </span> results
+                </p>
+
+                <div class="inline-block relative w-16 ml-4">
+                  <select
+                    class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                    name="limit" hx-get="/role" hx-select="#content-role" hx-target="#content-role" hx-indicator=".htmx-indicator" hx-swap="outerHTML" hx-push-url=true>
+                    <% [10, 25, 50, 100].forEach(function(value) { %>
+                      <option value="<%= value %>" <%= meta.itemsPerPage == value ? 'selected' : '' %>><%= value %></option>
+                    <% }); %>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+            <nav>
+              <ul
+                class="flex items-center text-sm leading-tight bg-white border divide-x rounded h-9 text-neutral-500 divide-neutral-200 border-neutral-200">
+                <% if (meta.currentPage > 1) { %>
+                  <li class="h-full">
+                    <a href="?page=<%= meta.currentPage - 1 %>&limit=<%= meta.itemsPerPage %>"
+                      class="relative inline-flex items-center h-full px-3 ml-0 rounded-l group hover:text-neutral-900">
+                      <span>Previous</span>
+                    </a>
+                  </li>
+                <% } %>
+
+                <% meta.pagination.forEach(function(page) { %>
+                  <% if (page === '...') { %>
+                    <span>...</span>
+                  <% } else { %>
+                    <li class="hidden h-full md:block">
+                      <a href="?page=<%= page %>&limit=<%= meta.itemsPerPage %>" class="relative inline-flex items-center h-full px-3 group hover:text-neutral-900"
+                        <%= page == meta.currentPage ? 'class="active"' : '' %>
+                        >
+                        <span> <%= page %></span>
+                        <span
+                          class="box-content absolute bottom-0 w-0 h-px -mx-px duration-200 ease-out translate-y-px border-transparent bg-neutral-900 group-hover:border-l group-hover:border-r group-hover:border-neutral-900 left-1/2 group-hover:left-0 group-hover:w-full"></span>
+                      </a>
+                    </li>
+                  <% } %>
+                <% }); %>
+
+
+                <% if (meta.currentPage < meta.totalPages) { %>
+                  <li class="h-full">
+                  <a href="?page=<%= meta.currentPage + 1 %>&limit=<%= meta.itemsPerPage %>" class="relative inline-flex items-center h-full px-3 rounded-r group hover:text-neutral-900">
+                  <span>Next</span>
+                </a>
+              </li>
+                <% } %>
+              </ul>
+            </nav>
+          </div>
+          <!--  -->
           </div>
         </div>
       </div>

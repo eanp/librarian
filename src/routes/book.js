@@ -1,10 +1,12 @@
-import { v4 as uuid } from "uuid";
+import express from "express";
 import { logger } from "../application/logging.js";
 import { prismaClient } from "../application/database.js";
-import express from "express";
 import { Protect } from "../application/auth.js";
-import {upload} from "../middleware/photo.js"
+import { generatePagination } from "../utils/meta.js";
+
 const route = express.Router();
+
+
 const sortOptions = [
   { value: "title-asc", label: "Title (A-Z)" },
   { value: "title-desc", label: "Title (Z-A)" },
@@ -133,8 +135,16 @@ const bookController = {
     try {
       const searchQuery = req.query.search?.toLowerCase() || '';
       const currentSort = req.query.sort || 'created_at-desc';
+      const currentFilter = {
+        category : req.query.category,
+        publisher : req.query.publisher,
+        condition : req.query.condition,
+      }
       const [sortField, sortOrder] = currentSort.split('-');
       const filters = parseFilters(req.query);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
 
       const distinctCategories = await prismaClient.book.findMany({
         distinct: ['category'],
@@ -166,9 +176,13 @@ const bookController = {
         value: e.condition
       }));
 
+      const total = await prismaClient.book.count()
+
       const books = await prismaClient.book.findMany({
         where: buildWhereClause(filters, searchQuery),
-        orderBy: validateSort(sortField, sortOrder)
+        orderBy: validateSort(sortField, sortOrder),
+        skip: offset,
+        take: limit
       });
 
       logger.info('Retrieved books:', {
@@ -177,15 +191,32 @@ const bookController = {
         sort: currentSort
       });
 
-      console.log(distinctCandition)
+      const totalPages = Math.ceil(total / limit);
+      const pagination = generatePagination(page, totalPages);
+
+      const meta = {
+        currentPage: page,
+        itemsPerPage: limit,
+        startItems: offset + 1,
+        endItems: (total < offset + limit) ? total : offset + limit,
+        lengthItems: books.length,
+        totalItems: total,
+        totalPages: totalPages,
+        prevPages: 0,
+        nextPages: 0,
+        pagination
+      };
+
 
       return res.render('book/main', {
         books,
-        searchValue: searchQuery,
         currentSort,
+        currentFilter,
+        searchValue: searchQuery,
         activeFilters: filters,
         sortOptions,
-        filterOptions
+        filterOptions,
+        meta
       });
     } catch (err) {
       logger.error('Error retrieving books:', err);

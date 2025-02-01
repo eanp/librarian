@@ -2,8 +2,7 @@ import express from "express";
 import session from "express-session";
 import * as dotenv from "dotenv";
 import seederRouter from "./seeder.js";
-import authCommand from "./auth.command.js";
-import authQuery from "./auth.query.js";
+import auth from "./auth.js";
 import book from "./book.js";
 import dashboardBook from "./dashboard.book.js";
 import { lucia, Protect } from "../application/auth.js";
@@ -44,8 +43,6 @@ route.use(async (req, res, next) => {
   res.locals.user = user;
   res.locals.query = req.query;
   res.locals.url = req.originalUrl;
-  console.log(req.originalUrl)
-  console.log(user)
   return next();
 });
 
@@ -53,7 +50,9 @@ route.use(async (req, res, next) => {
 let initial_data = {
   content: APP_NAME,
   status: "success",
-  email: ""
+  email: "",
+  messages: "",
+  value: null
 };
 
 route.get("/login", async (req, res, next) => {
@@ -67,8 +66,7 @@ route.get("/", Protect ,async (req, res, next) => {
 });
 
 route.use(seederRouter)
-route.use(authCommand)
-route.use(authQuery)
+route.use(auth)
 route.use(book)
 route.use(dashboardBook)
 

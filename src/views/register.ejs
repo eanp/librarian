@@ -16,16 +16,17 @@
           >
               <input
                   autocomplete="email"
-                  type="text"
+                  type="email"
                   name="email"
                   placeholder="name@yourmail.com"
+                  value="<%= value?.email ?? "" %>"
                   class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
               />
 
               <input
                   type="password"
                   name="password"
-                  value=""
+                  value="<%= value?.password ?? ""%>"
                   placeholder="password"
                   class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -60,7 +61,8 @@
           </button>
       </div>
 
-      <div id="errorMessages" class="relative w-full rounded-lg border border-transparent bg-red-50 p-4 [&>svg]:absolute [&>svg]:text-foreground [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:translate-y-[-3px] [&:has(svg)]:pl-11 text-red-600 mt-5">
+      <% if (status==="error" ) { %>
+        <div id="errorMessages" class="relative w-full rounded-lg border border-transparent bg-red-50 p-4 [&>svg]:absolute [&>svg]:text-foreground [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:translate-y-[-3px] [&:has(svg)]:pl-11 text-red-600 mt-5">
           <svg
               class="w-5 h-5 -translate-y-0.5"
               xmlns="http://www.w3.org/2000/svg"
@@ -77,8 +79,10 @@
           </svg>
           <h5 class="font-medium leading-none tracking-tight text-left">Oops</h5>
           <div class="text-sm opacity-80 whitespace-pre-line text-left -ml-5 pt-3">
-              <!-- Error message content will be injected here -->
+            <%= messages %>
           </div>
       </div>
+      <% } %>
+
   </div>
 </div>
