@@ -248,7 +248,11 @@
                 <div class="inline-block relative w-16 ml-4">
                   <select
                     class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    name="limit" hx-get="/role" hx-select="#content-role" hx-target="#content-role" hx-indicator=".htmx-indicator" hx-swap="outerHTML" hx-push-url=true>
+
+                    hx-get="/book"
+                    hx-trigger="change" hx-indicator=".htmx-indicator" hx-target="#content-book"
+                    hx-select="#content-book" hx-push-url="true"
+                    name="limit" >
                     <% [10, 25, 50, 100].forEach(function(value) { %>
                       <option value="<%= value %>" <%= meta.itemsPerPage == value ? 'selected' : '' %>><%= value %></option>
                     <% }); %>
