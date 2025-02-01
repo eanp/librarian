@@ -60,7 +60,7 @@ const createBook = async (req, res) => {
     const book = await prismaClient.book.create({ data: payload });
     logger.info('Book created:', book);
 
-    return res.redirect('/book');
+    res.header({ "Hx-redirect": "/book" }).send("created book successful!");
   } catch (err) {
     console.log('Error creating book:', err);
     const book = req.body
