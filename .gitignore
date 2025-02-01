@@ -41,3 +41,5 @@ package-lock.json
 .env
 
 /static/assets/*.css
+
+bun.lockb
