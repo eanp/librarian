@@ -16,7 +16,8 @@ let initial_data = {
 
 const createBook = async (req, res) => {
   try {
-    const cover_photo = req.file?.path ?? ""
+    console.log(req.file)
+    const cover_photo = req.file?.filename ? "uploads/" + req.file?.filename : ""
     const { body } = req;
     const payload = {
       code: uuid(),
